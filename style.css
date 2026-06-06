@@ -1,0 +1,725 @@
+/* ==========================================================================
+   1. RESET & CORE STYLES (ตั้งค่าพื้นฐานธีมมืด G-HUB)
+   ========================================================================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', 'Kanit', sans-serif;
+}
+
+body {
+    background-color: #0b0c0f; /* สีดำมืดสนิทสไตล์หน้าหลัก G-HUB */
+    color: #ffffff;
+    min-height: 100vh;
+    overflow-x: hidden;
+    position: relative;
+}
+
+/* เอฟเฟกต์แสงออร่าหลังบ้านเรืองแสงสีขาวฟุ้งตรงกลางหน้าจอตามรูปภาพ */
+body::before {
+    content: '';
+    position: absolute;
+    width: 600px;
+    height: 400px;
+    top: 35%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.05) 0%, rgba(0,0,0,0) 70%);
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* ==========================================================================
+   2. INTRO SCREEN (หน้าจอต้อนรับพร้อมแอนิเมชันรูปและตัวอักษรเด้ง)
+   ========================================================================== */
+#intro-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #0b0c0f;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.8s;
+}
+
+.intro-content {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 25px;
+}
+
+/* 🛠️ แก้ไข: รูปภาพโลโก้ไมค์กี้ให้ค่อยๆ เด้งขยายตัวลอยขึ้นมาตั้งแต่เริ่ม */
+.intro-logo {
+    width: 160px;
+    height: 160px;
+    object-fit: cover;
+    border-radius: 4px;
+    box-shadow: 0 0 35px rgba(255, 255, 255, 0.15); /* ออร่าเรืองแสงสีขาวจางๆ */
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    opacity: 0;
+    transform: scale(0.3);
+    animation: bounceFadeIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.1s forwards;
+}
+
+.animated-text {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+}
+
+/* ตัวอักษร G-HUB ค่อยๆ เด้งขึ้นมาทีละตัว */
+.animated-text span {
+    font-size: 3.5rem;
+    font-weight: 900;
+    color: #ffffff;
+    letter-spacing: 2px;
+    opacity: 0;
+    transform: scale(0.3);
+    animation: bounceFadeIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+.animated-text span:nth-child(1) { animation-delay: 0.3s; }
+.animated-text span:nth-child(2) { animation-delay: 0.45s; }
+.animated-text span:nth-child(3) { animation-delay: 0.6s; }
+.animated-text span:nth-child(4) { animation-delay: 0.75s; }
+.animated-text span:nth-child(5) { animation-delay: 0.9s; }
+
+.glow-line {
+    width: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent);
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+    animation: extendLine 1.5s ease-in-out 0.6s forwards;
+}
+
+/* ==========================================================================
+   3. NAVIGATION BAR (แถบเมนูด้านบนสุดสไตล์มินิมอล G-HUB)
+   ========================================================================== */
+.navbar {
+    background: rgba(10, 10, 10, 0.7); /* สีดำโปร่งแสง */
+    backdrop-filter: blur(15px);        /* ทำให้หลังเมนูเบลอ ดูพรีเมียม */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05); /* เส้นขอบบางๆ */
+    padding: 15px 0;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+/* คลาสเดิมในไฟล์ของคุณ ปรับให้จัดเรียงจากซ้ายไปขวา */
+.nav-container {
+    max-width: 1200px; /* จำกัดความกว้างไม่ให้เมนูยาวสุดจอ */
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 30px;
+}
+
+
+/* 🛠️ เพิ่มโค้ดส่วนนี้ หรือหาคลาส .nav-links เดิมแล้วเติมบรรทัดนี้เข้าไป */
+.nav-links {
+    display: flex;
+    list-style: none;
+    gap: 15px;
+    margin-left: 40px;   /* เพิ่มระยะห่างระหว่าง โลโก้ กับ เมนูหน้าแรก นิดหน่อย */
+    margin-right: auto;  /* 🛠️ บรรทัดสำคัญ! มันจะช่วยดันปุ่มล็อกอินฝั่งขวาให้เด้งไปอยู่ขวาสุดตามเดิม */
+}
+
+.nav-links a {
+    color: #9ca3af;
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 600;
+    padding: 10px 20px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* เมนูที่ถูกเลือกอยู่ตามรูปภาพตัวอย่าง */
+.nav-links a.active, .nav-links a:hover {
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.nav-auth {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.btn-signin {
+    background: transparent;
+    border: none;
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 0.9 /rem;
+    cursor: pointer;
+    transition: opacity 0.3s;
+}
+
+.btn-signin:hover {
+    opacity: 0.8;
+}
+
+/* ปุ่มสมัครสมาชิกกล่องสีขาวมนเด่นๆ */
+.btn-signup {
+    background: #ffffff;
+    color: #0b0c0f;
+    border: none;
+    padding: 10px 24px;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    cursor: pointer;
+    box-shadow: 0 4px 20px rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+}
+
+.btn-signup:hover {
+    background: #e5e7eb;
+    transform: translateY(-1px);
+}
+
+/* ==========================================================================
+   4. HERO SECTION (ส่วนใจกลางหน้าแรก G - HUB STORE)
+   ========================================================================== */
+#main-content {
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+    padding-top: 100px;
+    position: relative;
+    z-index: 1;
+}
+
+#main-content.show {
+    opacity: 1;
+}
+
+.hero {
+    max-width: 800px;
+    margin: 120px auto 40px auto;
+    text-align: center;
+    padding: 0 20px;
+}
+
+/* ป้ายกลมสถานะ SYSTEM ONLINE */
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: #9ca3af;
+    padding: 6px 18px;
+    border-radius: 100px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    margin-bottom: 35px;
+}
+
+.status-badge .dot {
+    width: 6px;
+    height: 6px;
+    background-color: #ffffff;
+    border-radius: 50%;
+    box-shadow: 0 0 8px #ffffff;
+}
+
+.hero-title {
+    font-size: 4rem; /* ปรับตัวเลขนี้ ยิ่งมากยิ่งใหญ่ครับ (เดิมอาจจะอยู่ที่ 3-4rem) */
+    font-weight: 900; /* ทำให้ตัวหนาสุดๆ */
+    color: #fff;
+    line-height: 1.1; /* ปรับให้บรรทัดไม่ห่างกันเกินไปเวลาตัวอักษรใหญ่ */
+    
+    /* เอฟเฟกต์แสงวาบเดิมที่ทำไว้ */
+    text-shadow: 0 0 15px rgba(255, 255, 255, 0.5), 
+                 0 0 30px rgba(255, 255, 255, 0.4);
+}
+
+.hero-subtitle {
+    font-size: 1.4rem;
+    margin-top: 40px;
+    color: #d4d8df;
+    line-height: 1.6;
+    margin-bottom: 60px;
+    font-weight: 500;
+}
+
+/* กลุ่มปุ่มกึ่งกลางหน้าจอ */
+.hero-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+/* ปุ่มรายการสินค้าสีขาวเด่นสะดุดตา */
+.btn-browse {
+    background: #ffffff;
+    color: #0b0c0f;
+    border: none;
+    padding: 14px 34px;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 0.95rem;
+    cursor: pointer;
+    box-shadow: 0 5px 25px rgba(255, 255, 255, 0.15);
+    transition: all 0.3s ease;
+}
+
+.btn-browse:hover {
+    background: #e5e7eb;
+    transform: translateY(-2px);
+}
+
+.btn-discord {
+    background: rgba(255, 255, 255, 0.02);
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 14px 34px;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-discord:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.15);
+}
+
+/* ==========================================================================
+   5. STATS CONTAINER (กล่องสถิติด้านล่างสุด)
+   ========================================================================== */
+.stats-container {
+    max-width: 1100px;
+    margin: 80px auto;
+    padding: 0 20px;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    align-items: stretch; /* บังคับให้ทุกกล่องสูงเท่ากับกล่องที่สูงที่สุด */
+}
+
+.stat-card {
+    background: rgba(255, 255, 255, 0.03); /* เติมสีพื้นหลังจางๆ ให้รู้ขอบเขต */
+    padding: 30px 15px;                  /* เพิ่ม padding ให้ดูโปร่ง */
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center; 
+    align-items: center;
+    transition: transform 0.3s ease;     /* เพิ่มลูกเล่นเวลา hover */
+}
+
+.stat-card:hover {
+    border-color: rgba(255, 255, 255, 0.08);
+}
+
+.stat-icon {
+    font-size: 1.2rem;
+    color: #9ca3af;
+    margin-bottom: 15px;
+}
+
+.stat-number {
+    font-size: 2rem;
+    font-weight: 800;
+    margin: 5px 0; /* ปรับให้เท่ากันทุกกล่อง */
+    color: #ffffff;
+    min-height: 2.5rem; /* บังคับให้เลขทุกตัวอยู่ในบรรทัดที่มีความสูงเท่ากัน */
+}
+
+.stat-label {
+    font-size: 0.75rem;
+    color: #6b7280;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+/* ==========================================================================
+   6. MARKETPLACE PAGE (ปรับปรุงการแสดงผลรูปภาพสินค้าให้คมชัดเต็มตา)
+   ========================================================================== */
+.hidden-page {
+    display: none !important;
+}
+
+.marketplace-container {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 0 40px;
+}
+
+.category-header {
+    font-size: 1rem;
+    font-weight: 800;
+    letter-spacing: 1px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 30px;
+    color: #ffffff;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+    padding-bottom: 15px;
+}
+
+.game-products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 30px;
+}
+
+.game-card {
+    background: rgba(255, 255, 255, 0.01);
+    border: 1px solid rgba(255, 255, 255, 0.03);
+    border-radius: 16px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.game-card:hover {
+    transform: translateY(-5px);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+/* 🛠️ แก้ไขจุดนี้: ปรับกล่องอุ้มรูปภาพให้ยืดหยุ่น ไม่บีบอัดรูปภาพจนเบี้ยว */
+.card-image-wrapper {
+    position: relative;
+    width: 100%;
+    height: auto; /* ปล่อยให้ความสูงขยายตามอัตราส่วนของรูปภาพจริง */
+    background: #111;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* 🛠️ แก้ไขจุดนี้: สั่งให้ตัวรูปภาพขยายเต็มพื้นที่ 100% คมชัด ไม่โปร่งแสงจางๆ */
+.card-img {
+    width: 100%;
+    height: auto;
+    object-fit: contain; /* ปรับให้รูปภาพสเกลสัดส่วนถูกต้อง ไม่ถูกตัดส่วนซ้ายขวา */
+    opacity: 1;          /* 🛠️ เปลี่ยนจาก 0.3 เป็น 1 เพื่อให้รูปสว่างคมชัดร้อยเปอร์เซ็นต์ */
+    display: block;
+}
+
+.card-overlay-title {
+    position: absolute;
+    font-size: 1.8rem;
+    font-weight: 900;
+    color: #ffffff;
+    z-index: 1;
+}
+
+.card-body {
+    padding: 25px;
+}
+
+.card-title {
+    font-size: 1.3rem;
+    font-weight: 800;
+    margin-bottom: 10px;
+}
+
+.card-desc {
+    font-size: 1.15rem;       /* 🛠️ ขยายขนาดตัวอักษรให้ใหญ่เต็มตาใกล้เคียงกับป้ายด้านล่าง */
+    font-weight: 600;         /* 🛠️ เพิ่มความหนาของตัวหนังสือให้ชัดเจนขึ้น */
+    color: #e5e7eb;           /* 🛠️ ปรับสีให้ขาวสว่างขึ้นจากเดิมที่เป็นสีเทาจาง */
+    line-height: 1.5;
+    margin-bottom: 20px;      /* เว้นระยะห่างลงไปหาป้ายฟีเจอร์ด้านล่างให้สมดุล */
+}
+
+.card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid rgba(255, 255, 255, 0.03);
+    padding-top: 20px;
+}
+
+.price-amount {
+    font-size: 1.5rem;
+    font-weight: 800;
+}
+
+/* ปุ่มสั่งซื้อสไตล์ขาวมนเด่นตามแบบ */
+.btn-getnow {
+    background: #ffffff;
+    color: #0b0c0f;
+    border: none;
+    padding: 10px 24px;
+    border-radius: 8px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-getnow:hover {
+    background: #e5e7eb;
+}
+
+/* ==========================================================================
+   7. KEYFRAMES ANIMATION (จังหวะคำสั่งการกระดอนเด้ง)
+   ========================================================================== */
+@keyframes bounceFadeIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.3);
+    }
+    70% {
+        transform: scale(1.08); /* จังหวะกระดอนเล็กน้อยให้สมูทนุ่มนวลตา */
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes extendLine {
+    0% { width: 0; opacity: 0; }
+    50% { opacity: 1; }
+    100% { width: 220px; opacity: 0.6; }
+}
+/* ==========================================================================
+   8. SUB-CATEGORY PAGE STYLES (สไตล์หน้ารายการแพ็คเกจย่อย)
+   ========================================================================== */
+.breadcrumb {
+    font-size: 0.8rem;
+    color: #6b7280;
+    margin-bottom: 15px;
+    font-weight: 500;
+}
+
+.category-title-main {
+    font-size: 2.2rem;
+    font-weight: 900;
+    color: #00bcff; /* สีฟ้าสว่างสไตล์ G-HUB */
+    letter-spacing: 1px;
+    margin-bottom: 30px;
+}
+
+.sub-category-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    padding-bottom: 12px;
+    margin-bottom: 25px;
+}
+
+.sub-title-text {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #00bcff;
+}
+
+.product-count {
+    font-size: 0.85rem;
+    color: #9ca3af;
+}
+
+/* ตั้งค่าจัดเรียงการ์ดสินค้า 6 อันเรียงกันตามรูป */
+.sub-products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 15px;
+}
+
+.sub-card {
+    background: #0f1115;
+    border: 1px solid rgba(255, 255, 255, 0.02);
+    border-radius: 8px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: all 0.2s;
+}
+
+.sub-card:hover {
+    border-color: rgba(0, 188, 255, 0.2);
+    transform: translateY(-3px);
+}
+
+.sub-card-img-wrapper {
+    width: 100%;
+    aspect-ratio: 1 / 1; /* บังคับรูปเป็นสี่เหลี่ยมจัตุรัสตามต้นฉบับ */
+    overflow: hidden;
+}
+
+.sub-card-img {
+    width: 100%;
+    height: 180px;          /* ปรับความสูงให้พอดีกับสัดส่วนกล่องการ์ด */
+    object-fit: cover;      /* 💡 สลักสำคัญ! สั่งให้ภาพตัดครอปพอดีกล่อง ไม่บีบอัดจนแบน */
+    object-position: center;/* จัดให้จุดกึ่งกลางภาพอยู่ตรงกลางกล่องเสมอ */
+    display: block;
+}
+
+.sub-card-body {
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.sub-item-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 6px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.sub-item-desc {
+    font-size: 0.7rem;
+    color: #9ca3af;
+    margin-bottom: 10px;
+}
+
+.sub-item-desc .check-icon {
+    color: #4ade80; /* ติ๊กถูกสีเขียวสด */
+    font-weight: bold;
+}
+
+.sub-item-price {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: #ffffff;
+    margin-top: auto;
+    margin-bottom: 4px;
+}
+
+.sub-item-stock {
+    font-size: 0.7rem;
+    color: #6b7280;
+    margin-bottom: 12px;
+}
+
+/* ปุ่มดูสินค้าสีฟ้าสดตามแบบเป๊ะๆ */
+.btn-view-product {
+    width: 100%;
+    background: #ffffff;
+    color: #000000;
+    border: none;
+    padding: 8px 0;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+    transition: background 0.2s;
+}
+
+.btn-view-product:hover {
+    background: #ffffff;
+}
+/* ==========================================================================
+   🛠️ ปรับสีข้อความหน้ารายการย่อย (Sub-category) ให้เป็นสีขาวคลีนๆ
+   ========================================================================== */
+
+/* 1. เปลี่ยนหัวข้อใหญ่ (BYPASS FREEFIRE) ให้เป็นสีขาว */
+.category-title-main {
+    color: #ffffff !important;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.1); /* เพิ่มมิติตัวอักษรเรืองแสงอ่อนๆ */
+}
+
+/* 2. เปลี่ยนข้อความย่อย "สินค้าในหมวดหมู่นี้" และจำนวนสินค้าให้เป็นสีขาว/เทาสว่าง */
+.sub-title-text {
+    color: #ffffff !important;
+}
+
+.sub-title-text i {
+    color: #ffffff !important; /* ปรับไอคอนกล่องสินค้าให้เป็นสีขาวด้วย */
+}
+
+.product-count {
+    color: #b3b3b3 !important; /* สีเทาสว่างเพื่อให้หัวข้อยังคงเด่น */
+}
+
+/* 3. ปรับสีชื่อแพ็คเกจในการ์ดแต่ละใบ (เช่น BYPASS UID 1 วัน) ให้เป็นสีขาวชัดๆ */
+.sub-item-title {
+    color: #ffffff !important;
+}
+/* สั่งซ่อนกล่องข้อความจำนวนสินค้า และปุ่มบวก-ลบ ไม่ให้โผล่มาบนจอ */
+.detail-right p:has(#detail-stock),
+.detail-right p:has(.fa-cubes) {
+    display: none !important;
+}
+/* 1. ตั้งค่าปุ่มปกติ และใส่ transition เพื่อให้มันเล่นแอนิเมชันแบบนุ่ม ๆ */
+.btn-checkout {
+    background: #00a8ff;
+    color: #fff;
+    border: none;
+    padding: 16px;
+    font-size: 1.15rem;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    /* แสงเรืองแสงสีฟ้าเริ่มต้น */
+    box-shadow: 0 4px 15px rgba(0, 168, 255, 0.4); 
+    /* 🌟 ตัวสำคัญ: สั่งให้ทุกอย่างขยับแบบนุ่มนวลในเวลา 0.3 วินาที */
+    transition: all 0.3s ease-in-out; 
+}
+
+/* 2. 🔥 โค้ดอนิเมชันตอนที่เอาเมาส์ไปชี้ (Hover) */
+.btn-checkout:hover {
+    background: #25b7ff; /* เปลี่ยนสีฟ้าให้สว่างวาบขึ้นเล็กน้อย */
+    box-shadow: 0 0 25px rgba(0, 168, 255, 0.8); /* เติมแสง Neon ให้เรืองแสงฟุ้งกระจายออกมา */
+    transform: translateY(-3px) scale(1.02); /* ดึงปุ่มให้ลอยขึ้นมาหาคนดู 3px และขยายใหญ่ขึ้น 2% */
+}
+
+/* 3. ตอนที่กดคลิกปุ่ม (Active) ให้ยุบตัวลงไปเหมือนโดนกดจริง */
+.btn-checkout:active {
+    transform: translateY(-1px) scale(0.99);
+    box-shadow: 0 4px 10px rgba(0, 168, 255, 0.5);
+}
+.main-logo {
+    font-weight: 800; /* ทำให้ตัวหนาสุดๆ */
+    font-size: 3rem;   /* ขนาดตัวอักษร */
+}
+/* ตั้งค่าปุ่มให้เตรียมรับเอฟเฟกต์ */
+.btn-discord:hover, .btn-order:hover {
+      transform: translateY(-2px);
+}
+#modal-price-display {
+    margin-top: 0px;      /* ลดระยะห่างด้านบน */
+    margin-bottom: 30px;  /* เพิ่มระยะห่างด้านล่าง ให้ห่างจาก QR Code */
+    font-size: 24px;      /* ปรับขนาดตัวหนังสือให้พอดี */
+    color: #ffffff;
+}
+/* ใส่ให้กับ id="close-modal" โดยตรง */
+#close-modal {
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* ทำให้เคลื่อนที่นุ่มนวล */
+}
+
+/* เมื่อเอาเมาส์ไปวาง */
+#close-modal:hover {
+    transform: translateY(-8px); /* เด้งขึ้นไป 8px */
+    box-shadow: 0 10px 20px rgba(255, 255, 255, 0.2); /* เพิ่มเงาให้ดูนูน */
+}
